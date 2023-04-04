@@ -40,6 +40,7 @@ class Game
     if @computer.lives.zero?
       puts "\nYou loose!\n\n"
       puts "The word was #{@computer.word}!!\n\n"
+      play_again
     else
       puts "You win!\n\n"
     end
@@ -67,7 +68,7 @@ class Game
     input
   end
 
-  def check_if_already_tried
+  def check_if_already_tried(input)
     while @computer.word_dashes.to_s.include?(input) ||
           @computer.incorrect_guesses.to_s.include?(input)
       puts "You've already tried this one. Try again..."

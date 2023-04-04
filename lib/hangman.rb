@@ -7,8 +7,7 @@ class Computer
   include HangmanDisplay
   attr_reader :word, :lives, :word_guessed, :word_dashes, :incorrect_guesses
 
-  def initialize(word = choose_word, incorrect_guesses = [], # rubocop:disable Metrics/ParameterLists
-                 word_dashes = '-' * word.length, lives = 6, word_guessed = false) # rubocop:disable Style/OptionalBooleanParameter
+  def initialize(word = choose_word, incorrect_guesses = [], word_dashes = '_' * word.length, lives = 6, word_guessed = false)
     @word = word
     @incorrect_guesses = incorrect_guesses
     @word_dashes = word_dashes
@@ -18,18 +17,20 @@ class Computer
 
   def choose_word
     contents = File.open('../5desk.txt', 'r', &:read)
-    contents_arr = contents.split(/\r\n/)
+    p contents
+    contents_arr = contents.split(' ')
     contents_arr.delete_if { |word| word.length < 5 || word.length > 12 }
+    p contents_arr
     contents_arr[rand(contents_arr.length)].downcase
   end
 
   def display(lives)
     hangman_diagram(lives)
-    puts "  #{@word_dashes.split('').join(' ')}"
-    puts "\n  Incorrect guesses: #{@incorrect_guesses}\n\n"
+    puts "    #{@word_dashes.split('').join(' ')}"
+    puts "\n    Incorrect guesses: #{@incorrect_guesses}\n\n"
   end
 
-  def hangman_diagram(lives) # rubocop:disable Metrics/CyclomaticComplexity
+  def hangman_diagram(lives)
     case lives
     when 6
       puts HangmanDisplay::HANGMAN_ZERO
@@ -57,6 +58,6 @@ class Computer
       @incorrect_guesses.push(guess)
       @lives -= 1
     end
-    @word_guessed = true unless @word_dashes.include('-')
+    @word_guessed = true unless @word_dashes.include?('_')
   end
 end
